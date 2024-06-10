@@ -13,7 +13,7 @@ _start:
 
 _not_42:
     mov rax, 60
-    xor rdi, rdi ; Correction: mettre rdi à zéro pour retourner 0
+    mov rdi, 1
     syscall
 
 _is_42:
