@@ -9,19 +9,20 @@ _start:
     mov rsi, [rsp + 8]
     mov rsi, [rsi]
     cmp rsi, 42
-    jne _not_42
+    je _is_42
 
+_not_42:
+    mov rax, 60
+    mov rdi, 1
+    syscall
+
+_is_42:
     mov rax, 1
     mov rdi, 1
     mov rdx, 5
     mov rsi, msg
     syscall
 
-    mov rax, 60
-    xor rdi, rdi
-    syscall
-
-_not_42: 
     mov rax, 60
     xor rdi, rdi
     syscall
