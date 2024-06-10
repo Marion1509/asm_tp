@@ -4,65 +4,47 @@ section .bss
     result_msg resb 50
 
 section .text
+
 _start:
-    cmp rdi, 2
-    jl no_args
+    mov rsi, qword [rsp + 8]  
+    mov rdi, qword [rsp + 16] 
+    
+    add rsi, rdi
 
-    mov rsi, [rsp + 16]
-    mov rdx, [rsp + 24]
-
-    call atoi
-    mov r8, rax
-    mov rsi, rdx
-    call atoi
-
-    add r8, rax
-
-    mov rdi, result_msg
-    call itoa
+    mov rax, rsi
+    mov rbx, 10
+    mov rcx, result_msg
+    call int_to_str
 
     mov rax, 1
     mov rdi, 1
+    mov rdx, 30
     mov rsi, result_msg
-    mov rdx, 50
     syscall
 
-    mov rax, 60
-    xor rdi, rdi
+    mov eax, 60
+    xor edi, edi
     syscall
 
-no_args:
-    mov rax, 60
-    mov rdi, 1
-    syscall
-
-atoi:
-    xor rax, rax
-    xor rcx, rcx
-loop_start:
-    movzx rdx, byte [rsi + rcx]
-    cmp rdx, '0'
-    jl end_loop
-    cmp rdx, '9'
-    jg end_loop
-    sub rdx, '0'
-    imul rax, 10
-    add rax, rdx
-    inc rcx
-    jmp loop_start
-end_loop:
-    ret
-
-itoa:
-    xor rcx, rcx
-    mov rdx, 10
-loop_start:
+int_to_str:
+    mov rdx, 0
+    mov r10, rbx
+.loop:
     xor rdx, rdx
-    div rdx
+    div r10
     add dl, '0'
-    mov [rdi + rcx], dl
+    mov [rcx], dl
     inc rcx
-    cmp rax, 0
-    jne loop_start
-    mov byte [rdi + rcx], 10
+    inc rdx
+    test rax, rax
+    jnz .loop
+.reverse:
+    dec rcx
+    mov al, [rcx]
+    mov dl, [rsi]
+    mov [rcx], dl
+    mov [rsi], al
+    inc rsi
+    cmp rdx, rcx
+    jae .reverse
     ret
