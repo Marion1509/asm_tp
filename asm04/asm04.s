@@ -4,7 +4,7 @@ section .text
 
 _start:
     
-    mov eax, [rsp + 8 ]
+    mov eax, [rsp + 16]
     test eax, 1
     jz _return_0
 
@@ -13,7 +13,6 @@ _start:
     jmp _exit
 
 _return_0:
-    
     xor eax, eax
 
 _exit:
