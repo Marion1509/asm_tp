@@ -1,69 +1,68 @@
 global _start
 
-section.bss
+section .bss
     result_msg resb 50
 
-section.text
+section .text
 _start:
-    cmp edi, 2
+    cmp rdi, 2
     jl no_args
 
-    mov ebp, esp
-    mov eax, [ebp + 16]
-    mov ebx, [ebp + 24]
+    mov rsi, [rsp + 16]
+    mov rdx, [rsp + 24]
 
     call atoi
-    mov esi, eax
-    mov eax, [ebp + 24]
+    mov r8, rax
+    mov rsi, rdx
     call atoi
 
-    add eax, esi
+    add r8, rax
 
-    mov esi, result_msg
+    mov rdi, result_msg
     call itoa
 
-    mov eax, 1
-    mov edi, 1
-    mov esi, result_msg
-    mov edx, 50
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, result_msg
+    mov rdx, 50
     syscall
 
-    mov eax, 60
-    xor edi, edi
+    mov rax, 60
+    xor rdi, rdi
     syscall
 
 no_args:
-    mov eax, 60
-    mov edi, 1
+    mov rax, 60
+    mov rdi, 1
     syscall
 
 atoi:
-    xor eax, eax
-    xor ecx, ecx
+    xor rax, rax
+    xor rcx, rcx
 loop_start:
-    movzx edx, byte [ebx + ecx]
-    cmp edx, '0'
+    movzx rdx, byte [rsi + rcx]
+    cmp rdx, '0'
     jl end_loop
-    cmp edx, '9'
+    cmp rdx, '9'
     jg end_loop
-    sub edx, '0'
-    imul eax, 10
-    add eax, edx
-    inc ecx
+    sub rdx, '0'
+    imul rax, 10
+    add rax, rdx
+    inc rcx
     jmp loop_start
 end_loop:
     ret
 
 itoa:
-    xor ecx, ecx
-    mov ebx, 10
+    xor rcx, rcx
+    mov rdx, 10
 loop_start:
-    xor edx, edx
-    div ebx
+    xor rdx, rdx
+    div rdx
     add dl, '0'
-    mov [esi + ecx], dl
-    inc ecx
-    cmp eax, 0
+    mov [rdi + rcx], dl
+    inc rcx
+    cmp rax, 0
     jne loop_start
-    mov byte [esi + ecx], 10
+    mov byte [rdi + rcx], 10
     ret
