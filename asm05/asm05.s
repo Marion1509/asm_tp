@@ -6,16 +6,13 @@ section .bss
 section .text
 
 _start:
-    
     mov ebp, esp
 
-    
     mov eax, [ebp + 8]  
     mov ebx, [ebp + 12] 
     
     add eax, ebx
 
-    
     mov eax, 4
     mov ebx, 1
     mov ecx, result_msg
